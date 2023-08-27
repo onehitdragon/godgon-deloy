@@ -1,0 +1,1 @@
+goddragon-service: https://github.com/onehitdragon/goddragon-service.git

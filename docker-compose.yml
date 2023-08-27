@@ -1,0 +1,49 @@
+name: godgon
+services:
+  proxy:
+    container_name: godgon-proxy
+    build: ./proxy-service
+    ports:
+      - 12345:12345
+    networks:
+      - proxy-net
+      - service-net
+    depends_on:
+      - server
+  server:
+    container_name: godgon-server
+    build: ./goddragon-service
+    networks:
+      - service-net
+    env_file:
+      - /godgon-service-variables.env
+    depends_on:
+      - database
+  database:
+    container_name: godgon-database
+    build: ./database-service
+    networks:
+      - service-net
+    env_file:
+      - ./database-service/database-service-variables.env
+    volumes:
+      - mysql-database-vol:/var/lib/mysql
+networks:
+  proxy-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.0.0/24
+          gateway: 10.0.0.1
+  service-net:
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.1.0.0/24
+          gateway: 10.1.0.1
+volumes:
+  mysql-database-vol:
+    
