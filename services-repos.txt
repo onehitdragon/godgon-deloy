@@ -1,1 +1,2 @@
 goddragon-service: https://github.com/onehitdragon/goddragon-service.git
+godgon-webpage: https://github.com/onehitdragon/godgon-webpage.git

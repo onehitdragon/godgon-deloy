@@ -4,12 +4,15 @@ services:
     container_name: godgon-proxy
     build: ./proxy-service
     ports:
-      - 12345:12345
+      - 443:443
     networks:
       - proxy-net
       - service-net
+    volumes:
+      - proxy-config-vol:/etc/nginx
     depends_on:
       - server
+      - web
   server:
     container_name: godgon-server
     build: ./goddragon-service
@@ -28,6 +31,13 @@ services:
       - ./database-service/database-service-variables.env
     volumes:
       - mysql-database-vol:/var/lib/mysql
+  web:
+    container_name: godgon-web
+    build: ./godgon-webpage
+    networks:
+      - service-net
+    env_file:
+      - /godgon-webpage-variables.env
 networks:
   proxy-net:
     driver: bridge
@@ -46,4 +56,5 @@ networks:
           gateway: 10.1.0.1
 volumes:
   mysql-database-vol:
+  proxy-config-vol:
     
